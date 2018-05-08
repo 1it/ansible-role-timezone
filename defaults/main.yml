@@ -1,3 +1,4 @@
 ---
-country: ru
-timezone: Europe/Moscow
+country: "ru"
+timezone: "Europe/Moscow"
+ntp_server: "0.{{ country }}.pool.ntp.org"
