@@ -20,7 +20,6 @@
     update_cache: yes
   with_items:
     - tzdata
-    - ntp
     - ntpdate
 
 - name: Timezone | Update the hardware clock
@@ -31,11 +30,19 @@
   template:
     src: etc_ntp.conf.j2
     dest: /etc/ntp.conf
-  notify:
-    - restart ntp
 
-- name: Timezone | Make sure ntpd is running and enabled
-  service:
+- name: Make sure ntpd is absent
+  apt:
     name: ntp
-    state: started
-    enabled: yes
+    state: absent
+
+- name: Set ntpdate job
+  cron:
+    name: ntpdate
+    job: "/usr/sbin/ntpdate -bs {{ ntp_server }}"
+    minute: "0"
+    hour: "*/12"
+    weekday: "*"
+    day: "*"
+    month: "*"
+    state: present
